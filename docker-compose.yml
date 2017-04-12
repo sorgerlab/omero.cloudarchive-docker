@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    image: dpwrussell/omero-grid-web
+    environment:
+      PUBLIC_GROUP: public-group
+    links:
+      - omero:master
+    ports:
+     - "8080:8080"
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+  omero:
+    image: dpwrussell/omero-hydration
+    environment:
+      DBUSER: postgres
+      DBPASS: postgres
+      DBNAME: postgres
+      ROOTPASS: omero
+      PUBLIC_GROUP: public-group
+    links:
+      - db
+    ports:
+      - "4063:4063"
+      - "4064:4064"
+    command: master

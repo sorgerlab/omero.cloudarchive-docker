@@ -15,8 +15,13 @@ aws s3 sync $S3_BUCKET /OMERO
 
 # TODO Check that database does not already have a schema deployed
 
+DBHOST=${DBHOST:-}
+if [ -z "$DBHOST" ]; then
+    DBHOST=db
+fi
+
 # Restore the database
-PGPASSWORD=$DBPASS pg_restore -h $DB_PORT_5432_TCP_ADDR -U $DBUSER -w -d $DBNAME -Fc /OMERO/omero_db.pg_dump
+PGPASSWORD=$DBPASS pg_restore -h $DBHOST -U $DBUSER -w -d $DBNAME -Fc /OMERO/omero_db.pg_dump
 
 # TODO Check that the version of the software deployed matches the version of
 # the database

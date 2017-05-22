@@ -9,8 +9,13 @@ S3_BUCKET=${4}
 
 # TODO Ensure the server is not running
 
+DBHOST=${DBHOST:-}
+if [ -z "$DBHOST" ]; then
+    DBHOST=db
+fi
+
 # Dump the database to a file
-PGPASSWORD=$DBPASS pg_dump -h $DB_PORT_5432_TCP_ADDR -U $DBUSER -w -d $DBNAME -Fc -f /OMERO/omero_db.pg_dump
+PGPASSWORD=$DBPASS pg_dump -h $DBHOST -U $DBUSER -w -d $DBNAME -Fc -f /OMERO/omero_db.pg_dump
 
 # TODO Formulate a list of files to dehydrate
 #  - Default to everything in /OMERO

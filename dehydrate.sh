@@ -28,4 +28,4 @@ PGPASSWORD=$DBPASS pg_dump -h $DBHOST -U $DBUSER -w -d $DBNAME -Fc -f /OMERO/ome
 AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
 AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
 AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
-aws s3 sync --exclude ".omero" --exclude "BioFormatsCache" --exclude "DropBox" /OMERO $S3_BUCKET
+aws s3 sync --exclude ".omero/*" --exclude "BioFormatsCache/*" --exclude "DropBox/*" /OMERO $S3_BUCKET

@@ -43,15 +43,15 @@ function sync {
         # Restore files essential to intiially start the server
         # TODO Call hydrate command
         echo "Restoring Thumbnails"
-        gosu omero aws s3 sync $S3_BUCKET/Thumbnails /OMERO/Thumbnails
+        gosu omero aws --no-sign-request s3 sync $S3_BUCKET/Thumbnails /OMERO/Thumbnails
         echo "Restoring FullText index"
-        gosu omero aws s3 sync $S3_BUCKET/FullText /OMERO/FullText
+        gosu omero aws --no-sign-request s3 sync $S3_BUCKET/FullText /OMERO/FullText
 
         # TODO Background download
         echo "Restoring Files"
-        gosu omero aws s3 sync $S3_BUCKET/Files /OMERO/Files
+        gosu omero aws --no-sign-request s3 sync $S3_BUCKET/Files /OMERO/Files
         echo "Restoring ManagedRepository"
-        gosu omero aws s3 sync $S3_BUCKET/ManagedRepository /OMERO/ManagedRepository
+        gosu omero aws --no-sign-request s3 sync $S3_BUCKET/ManagedRepository /OMERO/ManagedRepository
     fi
 }
 
@@ -110,7 +110,7 @@ elif [ "$TARGET" = master ]; then
         if [ ! -z "$S3_BUCKET" ]; then
 
             # TODO Add option to access S3 with credentials
-            gosu omero aws s3 cp $S3_BUCKET/omero_db.pg_dump /OMERO/omero_db.pg_dump
+            gosu omero aws --no-sign-request s3 cp $S3_BUCKET/omero_db.pg_dump /OMERO/omero_db.pg_dump
             if [ ! -f /OMERO/omero_db.pg_dump ]; then
                 echo "${S3_BUCKET}/omero_db.pg_dump not accessible"
                 exit 1

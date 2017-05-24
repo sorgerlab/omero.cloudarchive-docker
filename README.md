@@ -30,7 +30,7 @@ docker run \
   -e ROOTPASS=omero \
   -p 4063:4063 \
   -p 4064:4064 \
-  dpwrussell/omero-hydration
+  dpwrussell/omero.cloudarchive
 
 docker run \
   -d \
@@ -76,7 +76,7 @@ docker run \
   -p 4063:4063 \
   -p 4064:4064 \
   -v /TestData:/mnt/TestData \
-  dpwrussell/omero-hydration
+  dpwrussell/omero.cloudarchive
 ```
 
 Then log into the omero container through docker:

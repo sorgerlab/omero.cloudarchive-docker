@@ -13,7 +13,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
   omero:
-    image: dpwrussell/omero-cloudarchive
+    image: dpwrussell/omero.cloudarchive
     environment:
       DBUSER: postgres
       DBPASS: postgres

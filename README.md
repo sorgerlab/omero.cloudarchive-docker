@@ -127,7 +127,7 @@ AWS console or through the CLI like this (In this case I make it publicly
 readable to anyone, and in the us-east-1 region):
 
 ```bash
-EXPORT BUCKETNAME="<bucket_name>"
+export BUCKETNAME="<bucket_name>"
 aws s3api create-bucket --bucket ${BUCKETNAME} --acl public-read --region us-east-1
 echo "{ \"Version\" : \"2012-10-17\", \"Statement\" : [ { \"Effect\" : \"Allow\", \"Principal\" : \"*\", \"Resource\" : [ \"arn:aws:s3:::ionewfioewn9023/*\" ], \"Sid\" : \"PublicReadGetObject\", \"Action\" : [ \"s3:GetObject\" ] } ] }" > s3_public.json
 aws s3api put-bucket-policy --bucket ${BUCKETNAME} --policy file://s3_public.json --region us-east-1
@@ -137,7 +137,6 @@ Stop the server and begin the dehydration using the `~/dehydrate.sh` script and 
 AWS credentials.
 
 ```bash
-~/OMERO.server/bin/omero admin stop
 ~/dehydrate <aws_access_key_id> <aws_secret_access_key> <aws_session_token> <s3_bucket>
 ```
 

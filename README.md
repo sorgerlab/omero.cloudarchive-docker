@@ -16,7 +16,7 @@ docker container's manually like this:
 docker run \
   -d \
   --name postgres \
-  -e POSTGRES_PASSWORD=postgres
+  -e POSTGRES_PASSWORD=postgres \
   postgres:9.4
 
 docker run \

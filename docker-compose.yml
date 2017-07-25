@@ -1,13 +1,13 @@
 version: '3'
 services:
-  web:
-    image: dpwrussell/omero-grid-web
-    environment:
-      PUBLIC_GROUP: public-group
-    links:
-      - omero:master
-    ports:
-     - "8080:8080"
+  # web:
+  #   image: dpwrussell/omero-grid-web
+  #   environment:
+  #     PUBLIC_GROUP: public-group
+  #   links:
+  #     - omero:master
+  #   ports:
+  #    - "8080:8080"
   db:
     image: postgres:9.4
     environment:
@@ -15,14 +15,13 @@ services:
   omero:
     image: dpwrussell/omero.cloudarchive
     environment:
-      DBUSER: postgres
-      DBPASS: postgres
-      DBNAME: postgres
+      CONFIG_omero_db_user: postgres
+      CONFIG_omero_db_pass: postgres
+      CONFIG_omero_db_name: postgres
       ROOTPASS: omero
-      PUBLIC_GROUP: public-group
+      # CONFIG_omero_web_public_enabled: "true"
     links:
       - db
     ports:
       - "4063:4063"
       - "4064:4064"
-    command: master

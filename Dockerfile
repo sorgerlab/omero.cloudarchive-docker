@@ -1,9 +1,7 @@
-FROM dpwrussell/omero-grid
+FROM openmicroscopy/omero-server
 MAINTAINER douglas_russell@hms.havard.edu
 
 USER root
-
-ADD run.sh hydrate.sh dehydrate.sh /home/omero/
 
 RUN pip install awscli \
     && gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
@@ -13,3 +11,11 @@ RUN pip install awscli \
     && rm /usr/local/bin/gosu.asc \
     && rm -r /root/.gnupg/ \
     && chmod +x /usr/local/bin/gosu
+
+# ADD 95-cloudarchive.sh /startup/
+# ADD 5-volume-permissions.sh /startup-root/
+
+ADD hydrate.sh dehydrate.sh /opt/omero/cloudarchive/
+ADD entrypoint-root.sh /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/entrypoint-root.sh"]

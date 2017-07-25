@@ -137,7 +137,7 @@ Stop the server and begin the dehydration using the `~/dehydrate.sh` script and 
 AWS credentials.
 
 ```bash
-~/dehydrate <aws_access_key_id> <aws_secret_access_key> <aws_session_token> <s3_bucket>
+~/dehydrate.sh <aws_access_key_id> <aws_secret_access_key> <aws_session_token> <s3_bucket>
 ```
 
 This may take some time depending on the size of the repository to upload.

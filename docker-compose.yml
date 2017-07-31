@@ -19,6 +19,7 @@ services:
       CONFIG_omero_db_pass: postgres
       CONFIG_omero_db_name: postgres
       ROOTPASS: omero
+      # S3_BUCKET: "s3://dpwr/d3"
       # CONFIG_omero_web_public_enabled: "true"
     links:
       - db

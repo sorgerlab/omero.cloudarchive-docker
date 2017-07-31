@@ -23,10 +23,10 @@ docker run \
   -d \
   --name omero-master \
   --link postgres:db \
-  -e DBNAME=postgres \
-  -e DBPASS=postgres \
-  -e DBUSER=postgres \
-  -e PUBLIC_GROUP=public-group \
+  -e CONFIG_omero_db_name=postgres \
+  -e CONFIG_omero_db_pass=postgres \
+  -e CONFIG_omero_db_user=postgres \
+  -e CONFIG_omero_web_public_enabled=true \
   -e ROOTPASS=omero \
   -p 4063:4063 \
   -p 4064:4064 \
@@ -40,10 +40,6 @@ docker run \
   -p 8080:8080 \
   dpwrussell/omero-grid-web
 ```
-
-Note: It takes a few minutes for the containers to start and as they have to
-start and stop services during configuration so it may appear to be working
-then offline, then working again.
 
 Now the OMERO infrastructure is up and running normal importing using Insight
 can be commenced on localhost, standard OMERO ports (unless changed in the
@@ -69,10 +65,10 @@ docker run \
   -d \
   --name omero-master \
   --link postgres:db \
-  -e DBNAME=postgres \
-  -e DBPASS=postgres \
-  -e DBUSER=postgres \
-  -e PUBLIC_GROUP=public-group \
+  -e CONFIG_omero_db_name=postgres \
+  -e CONFIG_omero_db_pass=postgres \
+  -e CONFIG_omero_db_user=postgres \
+  -e CONFIG_omero_web_public_enabled=true \
   -p 4063:4063 \
   -p 4064:4064 \
   -v /TestData:/mnt/TestData \
@@ -108,23 +104,20 @@ example we will import everything:
 Dehydrate
 ---------
 
-Once an archive is built, it can be "dehydrated" into S3. First, generate
-some temporary credentials to use inside the omero-master container. Do this
-on whatever machine you have configured to communicate with AWS.
+Once an archive is built, it can be "dehydrated" into S3. A utility script is
+provider for this which should be run from *outside* the container, on the
+host. The reason for this is that currently a docker container can not
+introspect details about itself so it is necessary to gather these details
+from outside.
 
-```bash
-aws sts get-session-token
-```
+This script requires container name and S3 bucket identifier as arguments. It
+also uses the `aws` CLI to generate temporary credentials which are then used
+to interact with S3.
 
-Then login to omero-master through docker.
-
-```bash
-docker exec -it --user omero omero-master /bin/bash
-```
-
-Create a bucket in S3 to dehydrate the archive into. This can be done on the
-AWS console or through the CLI like this (In this case I make it publicly
-readable to anyone, and in the us-east-1 region):
+Before running the utility script, create a bucket in S3 to dehydrate the
+archive into. This can be done on the AWS console or through the CLI like this
+(In this case I make it publicly readable to anyone, and in the us-east-1
+region):
 
 ```bash
 export BUCKETNAME="<bucket_name>"
@@ -133,11 +126,10 @@ echo "{ \"Version\" : \"2012-10-17\", \"Statement\" : [ { \"Effect\" : \"Allow\"
 aws s3api put-bucket-policy --bucket ${BUCKETNAME} --policy file://s3_public.json --region us-east-1
 ```
 
-Stop the server and begin the dehydration using the `~/dehydrate.sh` script and the temporary
-AWS credentials.
+Now use the utility script to start the dehydration process.
 
 ```bash
-~/dehydrate.sh <aws_access_key_id> <aws_secret_access_key> <aws_session_token> <s3_bucket>
+./dehydrate-docker.sh <container_id> <s3_bucket>
 ```
 
 This may take some time depending on the size of the repository to upload.

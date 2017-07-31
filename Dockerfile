@@ -1,4 +1,4 @@
-FROM openmicroscopy/omero-server
+FROM dpwrussell/omero-server-extended
 MAINTAINER douglas_russell@hms.havard.edu
 
 USER root
@@ -12,10 +12,9 @@ RUN pip install awscli \
     && rm -r /root/.gnupg/ \
     && chmod +x /usr/local/bin/gosu
 
-# ADD 95-cloudarchive.sh /startup/
-# ADD 5-volume-permissions.sh /startup-root/
-
-ADD hydrate.sh dehydrate.sh /opt/omero/cloudarchive/
+ADD dehydrate.py /opt/omero/cloudarchive/
+ADD 55-presync.sh 95-cloudarchive.sh /startup/
+ADD 5-volume-permissions.sh /startup-root/
 ADD entrypoint-root.sh /usr/local/bin/
 
 ENTRYPOINT ["/usr/local/bin/entrypoint-root.sh"]

@@ -13,7 +13,7 @@ RUN pip install awscli \
     && chmod +x /usr/local/bin/gosu
 
 ADD dehydrate.py /opt/omero/cloudarchive/
-ADD 55-presync.sh 95-cloudarchive.sh /startup/
+ADD 55-cloudarchive-db.sh 95-cloudarchive.sh /startup/
 ADD 5-volume-permissions.sh /startup-root/
 ADD entrypoint-root.sh /usr/local/bin/
 

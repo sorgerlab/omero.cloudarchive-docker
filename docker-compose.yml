@@ -1,13 +1,22 @@
 version: '3'
 services:
-  # web:
-  #   image: dpwrussell/omero-grid-web
-  #   environment:
-  #     PUBLIC_GROUP: public-group
-  #   links:
-  #     - omero:master
-  #   ports:
-  #    - "8080:8080"
+  nginx:
+    image: dpwrussell/omero-nginx
+    links:
+      - web
+    ports:
+      - "8080:80"
+  web:
+    image: dpwrussell/omero-web
+    # environment:
+    #   CONFIG_omero_web_public_enabled: "true"
+    #   CONFIG_omero_web_public_user: public-user
+    #   CONFIG_omero_web_public_password: omero
+    #   CONFIG_omero_web_public_url__filter: "^/(?!webadmin|webclient/(action|logout|annotate_(file|tags|comment|rating|map)|script_ui|ome_tiff|figure_script)|webgateway/(archived_files|download_as))"
+    links:
+      - omero:master
+    ports:
+     - "4080:4080"
   db:
     image: postgres:9.4
     environment:

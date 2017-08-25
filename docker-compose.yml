@@ -1,26 +1,44 @@
 version: '3'
 services:
+
   nginx:
-    image: dpwrussell/omero-nginx
+    image: dpwrussell/omero-nginx-ms
+    environment:
+      OMERO_MS_THUMBNAIL_BACKEND_HOST: omero-ms-thumbnail
+      OMERO_MS_IMAGE_REGION_BACKEND_HOST: omero-ms-image-region
     links:
       - web
+      - omero-ms-thumbnail
     ports:
       - "8080:80"
+
   web:
-    image: dpwrussell/omero-web
-    # environment:
+    image: dpwrussell/omero-web-extended
+    environment:
+      CONFIG_omero_web_session__engine: django.contrib.sessions.backends.cache
+      CONFIG_omero_web_caches: '{"default": {"BACKEND": "django_redis.cache.RedisCache", "LOCATION": "redis://:redis@redis:6379/0"}}'
     #   CONFIG_omero_web_public_enabled: "true"
     #   CONFIG_omero_web_public_user: public-user
     #   CONFIG_omero_web_public_password: omero
     #   CONFIG_omero_web_public_url__filter: "^/(?!webadmin|webclient/(action|logout|annotate_(file|tags|comment|rating|map)|script_ui|ome_tiff|figure_script)|webgateway/(archived_files|download_as))"
     links:
       - omero:master
+      - redis
     ports:
      - "4080:4080"
+
+  redis:
+    image: dpwrussell/omero-redis
+    environment:
+      REDIS_PASSWORD: redis
+    ports:
+      - "6379:6379"
+
   db:
     image: postgres:9.4
     environment:
       POSTGRES_PASSWORD: postgres
+
   omero:
     image: dpwrussell/omero.cloudarchive
     environment:
@@ -28,10 +46,30 @@ services:
       CONFIG_omero_db_pass: postgres
       CONFIG_omero_db_name: postgres
       ROOTPASS: omero
-      # S3_BUCKET: "s3://dpwr/d3"
+      S3_BUCKET: "s3://dpwr/d3"
       # CONFIG_omero_web_public_enabled: "true"
     links:
       - db
     ports:
       - "4063:4063"
       - "4064:4064"
+
+  omero-ms-thumbnail:
+    image: dpwrussell/omero-ms-thumbnail
+    environment:
+      REDIS_PASSWORD: redis
+    ports:
+      - "8081:8080"
+    links:
+      - redis
+      - omero
+
+  omero-ms-image-region:
+    image: sorgerlab/omero-ms-image-region
+    environment:
+      REDIS_PASSWORD: redis
+    ports:
+      - "8082:8080"
+    links:
+      - redis
+      - omero

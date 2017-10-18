@@ -1,3 +1,16 @@
+OMERO.cloudarchive
+==================
+
+OMERO.cloudarchive can be used to provision the infrastructure for OMERO in a
+local or cloud environment. This mechanism can "hydrate" a previously created
+archive or be empty. Once running, data can be loaded/annotated/etc and then
+finally "dehydrated" into object storage.
+
+Instructions for deploying on AWS are available at:
+https://sorgerlab.github.io/omero.cloudarchive-cloudformation/
+
+Instructions for deploying locally follow.
+
 AWS
 ---
 

@@ -2,7 +2,7 @@ version: '3'
 services:
 
   nginx:
-    image: dpwrussell/omero-nginx-ms
+    image: sorgerlab/omero-nginx
     environment:
       OMERO_MS_THUMBNAIL_BACKEND_HOST: omero-ms-thumbnail
       OMERO_MS_IMAGE_REGION_BACKEND_HOST: omero-ms-image-region
@@ -28,7 +28,7 @@ services:
      - "4080:4080"
 
   redis:
-    image: dpwrussell/omero-redis
+    image: sorgerlab/omero-redis
     environment:
       REDIS_PASSWORD: redis
     ports:
@@ -55,7 +55,7 @@ services:
       - "4064:4064"
 
   omero-ms-thumbnail:
-    image: dpwrussell/omero-ms-thumbnail
+    image: sorgerlab/omero-ms-thumbnail
     environment:
       REDIS_PASSWORD: redis
     ports:
